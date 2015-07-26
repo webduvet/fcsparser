@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/webduvet/fcsparser/issues"
   },
-  "homepage": "https://github.com/webduvet/fcsparser#readme"
+  "homepage": "https://github.com/webduvet/fcsparser#readme",
+  "devDependencies": {
+    "nodeunit": "^0.9.1"
+  }
 }
