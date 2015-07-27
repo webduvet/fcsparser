@@ -17,9 +17,9 @@ module.exports = {
     done();
   },
   'throws error on wrong file or filepath': function(test) {
-    //test.throws(fp.init('none/esistent/file'));
+    test.throws(fp.init('none/esistent/file'));
     //test.throws(fp.init('mockdata/wrongFile.fcs'));
-    test.throws((function(){throw Error('fuckyou')})(), 'fuckyou', 'asdsad');
+    // test.throws((function(){throw Error('fuckyou')})(), 'fuckyou', 'asdsad');
     test.done();
   },
   'reads header': function(test){

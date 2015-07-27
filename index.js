@@ -4,12 +4,31 @@ var Parser = function(){
 
 }
 
+Parser.parseHeader = function(file) {
+  var header = {
+    type: '',
+    size: 0,
+    data:{
+      start: null,
+      end: null,
+      size: 0,
+      endianess: null
+    },
+    analysis: {
+      start: null,
+      end: null
+    }
+  };
+}
+
+
+
 /**
  * returns the header objects
  *
  * @returns {Object} Key value pairs containing the header info
  */
-Parser.prototype.getHeader = function(){
+Parser.prototype.getHeader = function() {
   var header = {
     type: '',
     size: 0,
@@ -32,7 +51,7 @@ Parser.prototype.getHeader = function(){
  *
  * @returns {Object} key value pairs param name param value
  */
-Parser.prototype.getParams(){
+Parser.prototype.getParams = function() {
   var params = {}
 
   return params;
@@ -44,7 +63,7 @@ Parser.init = function(filePath){
     file = fs.readFileSync(filePath);
   } catch (e) {
     console.log('bad');
-    throw new Error('BAAAAAD');
+    throw new Error({file: filePath, error: e, message: "can't open the file"});
   }
 
   return new Parser(file);
