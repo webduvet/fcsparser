@@ -34,22 +34,26 @@ var FcsStream = function(path) {
     offsets.analysisStart = +headerText[5];
     offsets.analysisEnd = +headerText[6];
   }
-  console.log(offsets);
+  //console.log(offsets);
 
   var textBuffer = new Buffer(offsets.textEnd - offsets.textStart);
-  console.log('buffer size', textBuffer.length);
+  //console.log('buffer size', textBuffer.length);
   fs.readSync(fd, textBuffer, 0, textBuffer.length, offsets.textStart);
   params = textBuffer.toString('utf8');
-  console.log(params.match(/\|(\$\w+)\|([a-zA-Z0-9 \.\,-:_\/]+)/g));
-  console.log(/\|(\$\w+)\|([a-zA-Z0-9 \.\,-:_\/]+)/g.exec(params));
+  //console.log(params.match(/\|(\$\w+)\|([a-zA-Z0-9 \.\,-:_\/]+)/g));
+  //console.log(/\|(\$\w+)\|([a-zA-Z0-9 \.\,-:_\/]+)/g.exec(params));
 
-  var myArray, myRe = /\|\$(\w+)\|([a-zA-Z0-9 \.\,-:_\/]+)/g, str = params;
-  while ((myArray = myRe.exec(str)) !== null) {
-    var msg = 'Found ' + myArray[1] + '= ' + myArray[2];
-    console.log(msg);
-  }
+  console.log(extractParams(params));
 
   fs.closeSync(fd);
+}
+
+function extractParams(str) {
+  var myArray, myRe = /\|\$(\w+)\|([a-zA-Z0-9 \.\,-:_\/]+)/g, params = {};
+  while ((myArray = myRe.exec(str)) !== null) {
+    params[myArray[1].toLowerCase()] = isNaN(+myArray[2]) ? myArray[2] : +myArray[2];
+  }
+  return params;
 }
 
 var fcs = new FcsStream('./test/mockdata/test1.fcs');
