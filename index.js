@@ -17,14 +17,27 @@ var offsets = {
 }
 
 var FcsStream = function(path) {
-  var buffer = new Buffer(58);
-  if (fs.exists(path)) console.log('ok');
-  else console.log('bad');
-  console.log(buffer);
-  fs.readSync(path, buffer, 0, 58, null);
+  var buffer = new Buffer(58),
+    headetTxt = '', offsers = {};
+  var fd = fs.openSync(path, 'r');
+  fs.readSync(fd, buffer, 0, 58, null);
+  fs.closeSync(fd);
+  headerText = buffer.toString('utf8').match(/\w+\.*\w*/g);
+  if (headerText.length < 7) {
+    throw Error('incorrect file, wrong header');
+  }
+  offsets.version = headerText[0];
+  offsets.textStart = headerText[1];
+  offsets.textEnd = headerText[2];
+  offsets.dataStart = headerText[3];
+  offsets.dataEnd = headerText[4];
+  if (headerText[5] != 0 && header[6] != 0) {
+    offsets.analysisStart = headerText[5];
+    offsets.analysisEnd = headerText[6];
+  }
 }
 
-var fcs = new FcsStream('test/mockdata/test1.fcs');
+var fcs = new FcsStream('./test/mockdata/test1.fcs');
 
 Parser.parseHeader = function(file) {
   var header = {
