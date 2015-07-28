@@ -18,12 +18,13 @@ var offsets = {
 
 var FcsStream = function(path) {
   var buffer = new Buffer(58);
+  if (fs.exists(path)) console.log('ok');
+  else console.log('bad');
   console.log(buffer);
-  fs.readSync(path, buffer, 0, 58, 0);
-  console.log(buffer);
+  fs.readSync(path, buffer, 0, 58, null);
 }
 
-var fcs = new FcsStream('./test/mockdata/test1.fcs');
+var fcs = new FcsStream('test/mockdata/test1.fcs');
 
 Parser.parseHeader = function(file) {
   var header = {
