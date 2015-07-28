@@ -30,31 +30,38 @@ var FcsStream = function(path) {
   offsets.textEnd = +headerText[2];
   offsets.dataStart = +headerText[3];
   offsets.dataEnd = +headerText[4];
+
   if (headerText[5] != 0 && headerText[6] != 0) {
     offsets.analysisStart = +headerText[5];
     offsets.analysisEnd = +headerText[6];
   }
-  //console.log(offsets);
 
   var textBuffer = new Buffer(offsets.textEnd - offsets.textStart);
-  //console.log('buffer size', textBuffer.length);
   fs.readSync(fd, textBuffer, 0, textBuffer.length, offsets.textStart);
   params = textBuffer.toString('utf8');
-  //console.log(params.match(/\|(\$\w+)\|([a-zA-Z0-9 \.\,-:_\/]+)/g));
-  //console.log(/\|(\$\w+)\|([a-zA-Z0-9 \.\,-:_\/]+)/g.exec(params));
 
   console.log(extractParams(params));
+  console.log(offsets);
 
   fs.closeSync(fd);
 }
 
 function extractParams(str) {
-  var myArray, myRe = /\|\$(\w+)\|([a-zA-Z0-9 \.\,-:_\/]+)/g, params = {};
+  var myArray, myRe = /[\|\/\x00-\x1F]\$(\w+)[\|\/\x00-\x1F]([a-zA-Z0-9 \.\,-:_\/]+)/g, params = {};
   while ((myArray = myRe.exec(str)) !== null) {
     params[myArray[1].toLowerCase()] = isNaN(+myArray[2]) ? myArray[2] : +myArray[2];
   }
   return params;
 }
+
+
+function createMetaData(params) {
+  var paramOffset = 0, i = 0;
+  for( , i < params.tot, i++){
+    paramOffset += params['p'+i+'b'];
+  }
+}
+
 
 var fcs = new FcsStream('./test/mockdata/test1.fcs');
 
