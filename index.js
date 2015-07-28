@@ -18,23 +18,38 @@ var offsets = {
 
 var FcsStream = function(path) {
   var buffer = new Buffer(58),
-    headetTxt = '', offsers = {};
+    headetTxt = '', offsets = {}, params = {};
   var fd = fs.openSync(path, 'r');
   fs.readSync(fd, buffer, 0, 58, null);
-  fs.closeSync(fd);
   headerText = buffer.toString('utf8').match(/\w+\.*\w*/g);
   if (headerText.length < 7) {
     throw Error('incorrect file, wrong header');
   }
   offsets.version = headerText[0];
-  offsets.textStart = headerText[1];
-  offsets.textEnd = headerText[2];
-  offsets.dataStart = headerText[3];
-  offsets.dataEnd = headerText[4];
-  if (headerText[5] != 0 && header[6] != 0) {
-    offsets.analysisStart = headerText[5];
-    offsets.analysisEnd = headerText[6];
+  offsets.textStart = +headerText[1];
+  offsets.textEnd = +headerText[2];
+  offsets.dataStart = +headerText[3];
+  offsets.dataEnd = +headerText[4];
+  if (headerText[5] != 0 && headerText[6] != 0) {
+    offsets.analysisStart = +headerText[5];
+    offsets.analysisEnd = +headerText[6];
   }
+  console.log(offsets);
+
+  var textBuffer = new Buffer(offsets.textEnd - offsets.textStart);
+  console.log('buffer size', textBuffer.length);
+  fs.readSync(fd, textBuffer, 0, textBuffer.length, offsets.textStart);
+  params = textBuffer.toString('utf8');
+  console.log(params.match(/\|(\$\w+)\|([a-zA-Z0-9 \.\,-:_\/]+)/g));
+  console.log(/\|(\$\w+)\|([a-zA-Z0-9 \.\,-:_\/]+)/g.exec(params));
+
+  var myArray, myRe = /\|\$(\w+)\|([a-zA-Z0-9 \.\,-:_\/]+)/g, str = params;
+  while ((myArray = myRe.exec(str)) !== null) {
+    var msg = 'Found ' + myArray[1] + '= ' + myArray[2];
+    console.log(msg);
+  }
+
+  fs.closeSync(fd);
 }
 
 var fcs = new FcsStream('./test/mockdata/test1.fcs');
