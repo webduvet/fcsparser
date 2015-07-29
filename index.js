@@ -23,6 +23,7 @@ var FcsStream = function(path) {
   fs.readSync(fd, buffer, 0, 58, null);
   headerText = buffer.toString('utf8').match(/\w+\.*\w*/g);
   if (headerText.length < 7) {
+    console.log(headerText);
     throw Error('incorrect file, wrong header');
   }
   offsets.version = headerText[0];
@@ -47,7 +48,7 @@ var FcsStream = function(path) {
 }
 
 function extractParams(str) {
-  var myArray, myRe = /[\|\/\x00-\x1F]\$(\w+)[\|\/\x00-\x1F]([a-zA-Z0-9 \.\,-:_\/]+)/g, params = {};
+  var myArray, myRe = /[\\\|\/\x00-\x1F]\$(\w+)[\\\|\/\x00-\x1F]([a-zA-Z0-9 \.\,-:_\/]+)/g, params = {};
   while ((myArray = myRe.exec(str)) !== null) {
     params[myArray[1].toLowerCase()] = isNaN(+myArray[2]) ? myArray[2] : +myArray[2];
   }
@@ -63,14 +64,14 @@ function extractParams(str) {
  */
 function eventOffset(params) {
   var paramOffset = 0, i = 0;
-  for( , i < params.tot, i++){
+  for( ; i < params.tot; i++){
     paramOffset += params['p'+i+'b'];
   }
   return paramOffset;
 }
 
 
-var fcs = new FcsStream('./test/mockdata/test1.fcs');
+var fcs = new FcsStream('./test/mockdata/big_file.fcs');
 
 Parser.parseHeader = function(file) {
   var header = {
