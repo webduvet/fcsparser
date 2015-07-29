@@ -55,11 +55,18 @@ function extractParams(str) {
 }
 
 
-function createMetaData(params) {
+/**
+ * extract event offset based on the paremeter size
+ * @param {Object}
+ *
+ * @returns {int}
+ */
+function eventOffset(params) {
   var paramOffset = 0, i = 0;
   for( , i < params.tot, i++){
     paramOffset += params['p'+i+'b'];
   }
+  return paramOffset;
 }
 
 
