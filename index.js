@@ -42,12 +42,14 @@ var FcsStream = function(path) {
   params = textBuffer.toString('utf8');
 
   params = extractParams(textBuffer.toString('utf8'));
-  offsets.dataStart = params.beginsdata ? params.beginsdata : offsets.dataStart;
-  offsets.dataEnd = params.endsdata ? params.endsdata : offsets.dataEnd;
+  offsets.analysisStart = params.beginanalysis ? params.beginanalysis : offsets.analysisStart;
+  offsets.analysisEnd = params.endanalysis ? params.endanalysis : offsets.analysisEnd;
+  offsets.dataStart = params.begindata ? params.begindata : offsets.dataStart;
+  offsets.dataEnd = params.enddata ? params.enddata : offsets.dataEnd;
   offsets.textStart = params.beginstext ? params.beginstext : offsets.textStart;
   offsets.textEnd = params.endstext ? params.endstext : offsets.textEnd;
-  console.log(params);
   console.log(offsets);
+  console.log(params);
 
 
 
@@ -55,7 +57,7 @@ var FcsStream = function(path) {
 }
 
 function extractParams(str) {
-  var myArray, myRe = /[\\\|\/\x00-\x1F]\$(\w+)[\\\|\/\x00-\x1F]([a-zA-Z0-9 \.\,-:_\/]+)/g, params = {};
+  var myArray, myRe = /[\\\|\/\x00-\x1F]\$(\w+)[\\\|\/\x00-\x1F]([a-zA-Z0-9 \.\,\-:_]+)/g, params = {};
   while ((myArray = myRe.exec(str)) !== null) {
     params[myArray[1].toLowerCase()] = isNaN(+myArray[2]) ? myArray[2] : +myArray[2];
   }
@@ -78,7 +80,7 @@ function eventOffset(params) {
 }
 
 
-var fcs = new FcsStream('./test/mockdata/test1.fcs');
+var fcs = new FcsStream('./test/mockdata/file31.fcs');
 
 Parser.parseHeader = function(file) {
   var header = {
