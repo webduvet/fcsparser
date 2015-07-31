@@ -6,13 +6,15 @@ var Parser = function(){
 // fcs3 starts at 0 versiom takes 10 bytes as text, then
 // every other number takes 8 bytes
 // header has length 58 bytes
-var offsets = {
+// start position, end position
+var positionMaps = {
   v2: [],
   v3: {
-    version: [0],
-    text: [10, 18], // start end, 8 bytes each position
-    data: [26, 34],
-    analysis: [42, 50]
+    version: [0, 5],
+    text: [[10, 17],[18, 25]],
+    data: [[26, 33],[34, 41]],
+    analysis: [[42, 49], [50, 57]],
+    others: [58,null]
   }
 }
 
@@ -21,6 +23,7 @@ var FcsStream = function(path) {
     headetTxt = '', offsets = {}, params = {};
   var fd = fs.openSync(path, 'r');
   fs.readSync(fd, buffer, 0, 58, null);
+  //TODO  this has to be done manually going through dedicated bytes
   headerText = buffer.toString('utf8').match(/\w+\.*\w*/g);
   if (/^fcs[23]/.test(headerText[0])) {
     console.log(headerText);
@@ -54,6 +57,49 @@ var FcsStream = function(path) {
 
 
   fs.closeSync(fd);
+}
+
+/**
+* @param {file} file descriptor
+* @param {Object} parameter Map
+*/
+function readHeader(fd, pm) {
+  var fields = Object.keys(pm), buf,
+    header = {
+      title: null,
+      text: {
+        start: null,
+        end: null
+      },
+      data: {
+        start: null,
+        end: null
+      },
+      analysis: {
+        start: null,
+        end: null
+      },
+      other: {
+        start: null,
+        end: null
+      }
+    }
+    ;
+
+  buf = new Buffer(6);
+  fs.readSync(fd, buf, 0, buf.length, null);
+  header.title = buf.toString('utf8');
+  
+  fields.forEach(function(key, i){
+    // start, first position
+    buf = new Buffer(pm[key][0][1] - pm[key][0][0]);
+    fs.readSync(fd, buf, 0, buf.length, null);
+    header[key].start = +buf.toString('utf8');
+    // end
+    buf = new Buffer(pm[key][1][1] - pm[key][1][0]);
+    fs.readSync(fd, buf, 0, buf.length, null);
+    header[key].end = +buf.toString('utf8');
+  });
 }
 
 function extractParams(str) {
