@@ -1,7 +1,7 @@
 var fs = require('fs');
 
 
-var Parser = function(fd) {
+var HeaderParser = function(fd) {
 }
 
 /**
@@ -28,7 +28,7 @@ var Parser = function(fd) {
 * first 3 values pairs in returned header are TEXT DATA and ANALYSIS
 *
 */
-Parser.parseHeader = function(fd) {
+HeaderParser.parseHeader = function(fd) {
 	var version,
 		versionBuffer = new Buffer(10),
 		buffer = new Buffer(48), 
@@ -44,11 +44,13 @@ Parser.parseHeader = function(fd) {
 	version = versionBuffer.toString().trim();
 
 	fs.readSync(fd, buffer, 0, buffer.length, null);
-	values = buffer.toString().match(/.{1,8}/g)
-		.maps(function(el) {
+	values = buffer.toString()
+		.match(/.{1,8}/g)
+		.map(function(el) {
 			return +el;
 		})
-		.sort();
+	//	.sort()
+		;
 
 	// check for invalid data in header
 	if (isNaN(values[0])) {
@@ -63,14 +65,15 @@ Parser.parseHeader = function(fd) {
 	}
 	// check for extended header
 	if (values[0] > 58) {
-		//TODO we have extended header by other data
 		var ottherBuffer = new Buffer(values[0] - 58);
 		fs.readSync(fd, otherBuffer, 0, otherBuffer.length, null);
-		otherValues = otherBuffer.toString().match(/.{1,8}/g)
-			.maps(function(el) {
+		otherValues = otherBuffer.toString()
+			.match(/.{1,8}/g)
+			.map(function(el) {
 				return +el;
 			})
-			.sort();
+	//		.sort()
+			;
 		for( i1, i2; i2 < otherValues.length; i1 += 2, i2 +=2){
 			header.push({
 				start: values[i1],
@@ -81,4 +84,11 @@ Parser.parseHeader = function(fd) {
 	return header;
 }
 
-module.exports = Parser;
+module.exports = HeaderParser;
+
+/**
+* sorter for byte positions
+* we can't have two positions the same except 0
+*/
+function sortPositions(p, n) {
+}
