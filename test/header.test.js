@@ -40,7 +40,6 @@ module.exports = {
 		'file2': function(test) {
 			fd = fs.openSync(testFile2, 'r');
 			header = hp.parseHeader(fd);
-			console.log(header);
 			test.ok(header, "expected truthy value in header");
 			test.equals(header.length, 3, 'expect 3 header segments');
 			test.equals(header[0].start, 256, 'expect text segment satrt at 58');
