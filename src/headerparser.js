@@ -65,7 +65,7 @@ HeaderParser.parseHeader = function(fd) {
 	}
 	// check for extended header
 	if (values[0] > 58) {
-		var ottherBuffer = new Buffer(values[0] - 58);
+		var otherBuffer = new Buffer(values[0] - 58);
 		fs.readSync(fd, otherBuffer, 0, otherBuffer.length, null);
 		otherValues = otherBuffer.toString()
 			.match(/.{1,8}/g)
@@ -75,10 +75,12 @@ HeaderParser.parseHeader = function(fd) {
 	//		.sort()
 			;
 		for( i1, i2; i2 < otherValues.length; i1 += 2, i2 +=2){
-			header.push({
-				start: values[i1],
-				end: values[i2]
-			});
+			if(otherValues[i1] && otherValues[i2]) {
+				header.push({
+					start: otherValues[i1],
+					end: otherValues[i2]
+				});
+			}
 		}
 	}
 	return header;
