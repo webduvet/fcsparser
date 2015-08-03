@@ -2,7 +2,7 @@
 * TODO make configurable cache for param buffer
 */
 var
-	Parser
+	Parser,
 	fs = require('fs')
 ;
 
@@ -23,7 +23,7 @@ Parser = function(fd, eP, header) {
 		.map(function(v) {
 			return +v;
 		});
-	fixByteOrder(this.byteOrder);
+	fixByteOrderIndex(this.byteOrder);
 };
 
 /**
@@ -39,11 +39,20 @@ Parser.prototype.parseParamData = function(param) {
 	var
 		bsize = this.eP.pByteSize(param),
 		buffer = new Buffer(this.eP.tot * bsize),
+    bu = new Buffer(bsize);
 		i = 0
 	;
 
+  this.byteOrder.forEach(function(el,i) {
+  });
+
 	for(; i < this.eP.tot; i++) {
-		fs.readSync(fd, buffer, bsize*i, bsize, this.dS + i * this.eP.offset());
+    // reads according byte order
+    // TODO check if it is faster than proecessing byte order after the event is loaded
+    this.byteOrder.forEach(function(el,i) {
+      fs.readSync(fd, buffer, bsize*i + this.byteOrder[i], 1, this.dS + i * this.eP.offset() + i);
+    });
+		// fs.readSync(fd, buffer, bsize*i, bsize, this.dS + i * this.eP.offset());
 	}
 	return buffer;
 };
@@ -55,11 +64,15 @@ module.exports = Parser;
 * we need 0,1,2,3 
 * to match the array
 */
-function fixByteOrder(val) {
-	if(val.conains(0)) {
+function fixByteOrderIndex(val) {
+	if(val.contains(0)) {
 		return;
 	}
 	val.map(function(v){
 		return v-1;
 	});
+}
+
+function fixByteOrder(buffer, byteOrder) {
+
 }
