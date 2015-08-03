@@ -14,7 +14,7 @@ var positionMaps = {
     text: [[10, 17],[18, 25]],
     data: [[26, 33],[34, 41]],
     analysis: [[42, 49], [50, 57]],
-    others: [58,null]
+    others: [58,null] // if text or data or analysis does not start here we have other
   }
 }
 
@@ -54,9 +54,15 @@ var FcsStream = function(path) {
   console.log(offsets);
   console.log(params);
 
-
-
   fs.closeSync(fd);
+}
+
+function getHeader() {
+  return this._header;
+}
+
+function getAllParams() {
+  return this._params;
 }
 
 /**
@@ -125,8 +131,6 @@ function eventOffset(params) {
   return paramOffset;
 }
 
-
-var fcs = new FcsStream('./test/mockdata/file31.fcs');
 
 Parser.parseHeader = function(file) {
   var header = {
