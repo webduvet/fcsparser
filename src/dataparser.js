@@ -49,8 +49,8 @@ Parser.prototype.parseParamData = function(param) {
 	for(; i < this.eP.tot; i++) {
     // reads according byte order
     // TODO check if it is faster than proecessing byte order after the event is loaded
-    this.byteOrder.forEach(function(el,i) {
-      fs.readSync(fd, buffer, bsize*i + this.byteOrder[i], 1, this.dS + i * this.eP.offset() + i);
+    this.byteOrder.forEach(function(el,index) {
+      fs.readSync(fd, buffer, bsize*i + el, 1, this.dS + i * this.eP.offset() + index);
     });
 		// fs.readSync(fd, buffer, bsize*i, bsize, this.dS + i * this.eP.offset());
 	}
