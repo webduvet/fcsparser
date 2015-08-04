@@ -12,10 +12,16 @@
 var Color = function(buffer, info) {
   this.buf = buffer;
   this.info = info;
+  // we already have the lower ednian from read
   this.method = 'readUInt'+info.byteSize+'LE';
   this.offset = 0;
 }
 
+/**
+ * @param {int} offset in the buffer, index of the event
+ *
+ * @returns {int} parameter value
+ */
 Color.prototype.readDot = function(offset) {
   var 
     dot = 0,
@@ -32,6 +38,9 @@ Color.prototype.readDot = function(offset) {
   return dot;
 };
 
-Color.prototype.readStream
+Color.prototype.readSequence = function(offset, length) {
+  // node.js does not have typed arrays
+
+}
 
 module.exports = Color;
