@@ -30,6 +30,8 @@ Color.prototype.readDot = function(offset) {
     dot += 
   */
   return dot;
-}
+};
+
+Color.prototype.readStream
 
 module.exports = Color;
