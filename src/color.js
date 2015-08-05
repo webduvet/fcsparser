@@ -28,7 +28,7 @@ Color.prototype.readDot = function(offset) {
     i = 0
   ;
  
-  dot = buf[this.method](offset);
+  dot = buf[this.method](offset * this.byteCount);
 
   /*
   for(; i < info.biteSize; i++) {

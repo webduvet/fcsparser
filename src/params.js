@@ -27,11 +27,23 @@ EventParams.prototype.pName = function(p) {
 
 /**
 * returns size of the parameter value in bytes
+* @param {int} parameter name (number)
+*
+* @return {int} size of the parameter [8,16,32,64]
 */
-EventParams.prototype.pByteSize = function(p) {
-	return this.params['p'+p+'b']/8;
+EventParams.prototype.byteSize = function(p) {
+	return this.params['p'+p+'b'];
 };
 
+/**
+* returns size of the parameter value in bytes
+* @param {int} parameter name (number)
+*
+* @return {int} number of bytes per paremeter
+*/
+EventParams.prototype.byteCount = function(p) {
+	return this.params['p'+p+'b']/8;
+};
 
 
 module.exports = EventParams;
