@@ -19,7 +19,7 @@ Parser = function(fd, eP, header) {
 	this.eP = eP;
 	this.dS = header.data.start;
 	this.dE = header.data.end;
-	this.byteOrder = /\d/g.match(eP['byteorder'])
+	this.byteOrder = /\d/g.match(eP['byteord'])
 		.map(function(v) {
 			return +v;
 		});
@@ -42,9 +42,6 @@ Parser.prototype.parseParamData = function(param) {
     bu = new Buffer(bsize);
 		i = 0
 	;
-
-  this.byteOrder.forEach(function(el,i) {
-  });
 
 	for(; i < this.eP.tot; i++) {
     // reads according byte order
