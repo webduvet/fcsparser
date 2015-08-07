@@ -39,7 +39,6 @@ Parser.prototype.parseParamData = function(param) {
 	var
 		bsize = this.eP.pByteSize(param),
 		buffer = new Buffer(this.eP.tot * bsize),
-    bu = new Buffer(bsize);
 		i = 0
 	;
 
@@ -70,6 +69,3 @@ function fixByteOrderIndex(val) {
 	});
 }
 
-function fixByteOrder(buffer, byteOrder) {
-
-}

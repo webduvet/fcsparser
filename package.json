@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/webduvet/fcsparser#readme",
   "devDependencies": {
+    "jshint": "^2.8.0",
+    "mocha": "^2.2.5",
     "nodeunit": "^0.9.1"
   }
 }
