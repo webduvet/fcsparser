@@ -1,35 +1,39 @@
-var TextParser = function() {
-};
-
+var fs = require('fs');
 /**
-* static method to extract parameters form text segment
-* @param {file descriptor}
-* @param {Object} header object - will be be ammended if any further data is
-* 	discovered in text segment
-*
-* @returns {object} parameter set for fcs file
-* */
-TextParser.parseText = function(fd, header) {
-
-	var buffer = new Buffer(header.text.end - header.text.start),
-		str = fs.readSync(fd, buffer, 0, buffer.length, null).toString('utf8');
+* creates the text parser from given file descriptor
+* @constructor
+* @parama {File descriptor}
+*/
+var TextParser = function(fd, header) {
+	var buffer = new Buffer(header[1].end - header[1].start),
 		params = {},
+		str,
 		rE = /[\\\|\/\x00-\x1F]\$(\w+)[\\\|\/\x00-\x1F]([a-zA-Z0-9 \.\,\-:_]+)/g,
 		arr
 	;
-	
+
+	this.fd = fd;
+	this.header = header;
+	this.text = null;
+
+	fs.readSync(fd, buffer, 0, buffer.length, null),
+	str = buffer.toString('utf8');
+
   while ((arr = rE.exec(str)) !== null) {
     params[arr[1].toLowerCase()] = isNaN(+arr[2]) ? arr[2] : +arr[2];
   }
+
+	this.text = params;
+
 	if(+params.begindata && +params.enddata) {
-		header.data.start = +params.begindata;
-		header.data.end = +params.enddata;
+		header[1].start = +params.begindata;
+		header[1].end = +params.enddata;
 	}
 	if(+params.beginanalysis && +params.endanalysis) {
-		header.analysis.start = +params.beginanalysis;
-		header.analysis.end = +params.endanalysis;
+		header[2].start = +params.beginanalysis;
+		header[2].end = +params.endanalysis;
 	}
-  return params;
 };
+
 
 module.exports = TextParser;

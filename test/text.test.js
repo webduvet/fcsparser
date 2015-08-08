@@ -35,18 +35,18 @@ module.exports = {
 	'happy path': {
 		'read text segment file1': function(test) {
 			fd = fs.openSync(testFile1, 'r');
-			var params = tp.parseText(fd, mockHeader1);
+			var params = tp.parseText(fd, mockHeader1[1]);
 			test.ok(params, 'Expect truthy value in params');
 			test.ok(params.tot, 'Expect to hav TOT paramter');
-			test.ok(params.byteorder, 'Expect to have bytorder parameter');
+			test.ok(params.byteord, 'Expect to have bytorder parameter');
 			test.done();
 		},
 		'read text segment file2': function(test) {
 			fd = fs.openSync(testFile2, 'r');
-			var params = tp.parseText(fd, mockHeader2);
+			var params = tp.parseText(fd, mockHeader2[1]);
 			test.ok(params, 'Expect truthy value in params');
 			test.ok(params.tot, 'Expect to hav TOT paramter');
-			test.ok(params.byteorder, 'Expect to have bytorder parameter');
+			test.ok(params.byteord, 'Expect to have bytorder parameter');
 			test.done();
 		}
 	}
