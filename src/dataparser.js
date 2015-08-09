@@ -15,11 +15,11 @@ var
 * 	this object needs to be valid,	we do not check it here. the paraparser does it.
 * @param {Object} header info
 */
-Parser = function(fd, eP, header) {
-	this.eP = eP;
-	this.dS = header.data.start;
-	this.dE = header.data.end;
-	this.byteOrder = /\d/g.match(eP['byteord'])
+Parser = function(fd, cP, header) {
+	this.cP = cP;
+	this.dS = header[1].start;
+	this.dE = header[1].end;
+	this.byteOrder = /\d/g.match(cP['byteord'])
 		.map(function(v) {
 			return +v;
 		});
@@ -33,26 +33,28 @@ Parser = function(fd, eP, header) {
 * @returns {Object} object containing buffer and bytesize for the parameter
 */
 Parser.prototype.parseParamData = function(param) {
-	if(!this.eP.pName(param)) {
+	if(!this.cP.pName(param)) {
 		throw Error('wrong parameters entered');
 	}
 	var
-		bsize = this.eP.pByteSize(param),
-		buffer = new Buffer(this.eP.tot * bsize),
+		bsize = this.cP.bsize(param),
+    bcount = this.cP.bcount(param),
+
+		buffer = new Buffer(this.cP.tot * bsize),
 		i = 0
 	;
 
-	for(; i < this.eP.tot; i++) {
+	for(; i < this.cP.tot; i++) {
     // reads according byte order
     // TODO check if it is faster than proecessing byte order after the event is loaded
     this.byteOrder.forEach(function(el,index) {
-      fs.readSync(fd, buffer, bsize*i + el, 1, this.dS + i * this.eP.offset() + index);
+      fs.readSync(fd, buffer, bcount*i + el, 1, this.dS + i * this.cP.offset() + index);
     });
-		// fs.readSync(fd, buffer, bsize*i, bsize, this.dS + i * this.eP.offset());
 	}
 	return {
     buffer: buffer,
     bsize: this.bsize,
+    bcount: this.bsize / 8,
     name: param
   }
 };
