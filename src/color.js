@@ -27,7 +27,7 @@ Color.prototype.readEvent = function(offset) {
     i = 0
   ;
  
-  ev = buf[this.method](offset * this.bcount);
+  ev = o.buffer[this.method](offset * this.bcount);
 
   /*
   for(; i < info.biteSize; i++) {
