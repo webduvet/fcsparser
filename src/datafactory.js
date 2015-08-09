@@ -7,8 +7,10 @@ var
 ;
 
 /**
-* creates instance of event parser which can parse data for two parameters
-* so they can be plotted into dotted graph
+* create sfactory instance
+* @constructor
+* this factory creates the instanc ef the data object representing one color
+* data object contains basic info and reference to binary data buffer
 *
 * @param {file descriptor}
 * @param {TextSegment} instance of text segment object
@@ -32,13 +34,13 @@ DataFactory = function(fd, tS, header) {
 *
 * @returns {Object} object containing buffer and bytesize for the parameter
 */
-DataFactory.prototype.parseParamData = function(param) {
-	if(!this.tS.pName(param)) {
+DataFactory.prototype.parseColor = function(colorIndex) {
+	if(!this.tS.pName(colorIndex)) {
 		throw Error('wrong parameters entered');
 	}
 	var
-		bsize = this.tS.bsize(param),
-    bcount = this.tS.bcount(param),
+		bsize = this.tS.bsize(colorIndex),
+    bcount = this.tS.bcount(colorIndex),
 
 		buffer = new Buffer(this.tS.tot * bsize),
 		i = 0
@@ -56,8 +58,8 @@ DataFactory.prototype.parseParamData = function(param) {
     buffer: buffer,
     bsize: this.bsize,
     bcount: this.bsize / 8,
-    index: param,
-    name: this.tS.pName(param)
+    colorIndex: colorIndex,
+    name: this.tS.pName(colorIndex)
   }
 };
 
