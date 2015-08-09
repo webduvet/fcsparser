@@ -5,14 +5,14 @@
  * @constructor
  *
  * @param {Buffer} reference to binary data
- * @param {Object} info object containg byteorder, bytesize,
+ * @param {Object} info object containg byteorder, bytesize and buffer
  *  name and index of the parameter
  * 
  */
 var Color = function(o) {
   this.o = o;
   // we already have the lower ednian from read
-  this.method = 'readUInt'+.byteSize+'LE';
+  this.method = 'readUInt'+o.bsize+'LE';
   this.offset = 0;
 }
 

@@ -11,15 +11,15 @@ var
 * so they can be plotted into dotted graph
 *
 * @param {file descriptor}
-* @param {EventParam} instance of parameters object
+* @param {TextSegment} instance of text segment object
 * 	this object needs to be valid,	we do not check it here. the paraparser does it.
 * @param {Object} header info
 */
-DataFactory = function(fd, cP, header) {
-	this.cP = cP;
+DataFactory = function(fd, tS, header) {
+	this.tS = tS;
 	this.dS = header[1].start;
 	this.dE = header[1].end;
-	this.byteOrder = /\d/g.match(cP['byteord'])
+	this.byteOrder = /\d/g.match(tS['byteord'])
 		.map(function(v) {
 			return +v;
 		});
@@ -33,22 +33,22 @@ DataFactory = function(fd, cP, header) {
 * @returns {Object} object containing buffer and bytesize for the parameter
 */
 DataFactory.prototype.parseParamData = function(param) {
-	if(!this.cP.pName(param)) {
+	if(!this.tS.pName(param)) {
 		throw Error('wrong parameters entered');
 	}
 	var
-		bsize = this.cP.bsize(param),
-    bcount = this.cP.bcount(param),
+		bsize = this.tS.bsize(param),
+    bcount = this.tS.bcount(param),
 
-		buffer = new Buffer(this.cP.tot * bsize),
+		buffer = new Buffer(this.tS.tot * bsize),
 		i = 0
 	;
 
-	for(; i < this.cP.tot; i++) {
+	for(; i < this.tS.tot; i++) {
     // reads according byte order
     // TODO check if it is faster than processing byte order after the event is loaded
     this.byteOrder.forEach(function(el,index) {
-      fs.readSync(fd, buffer, bcount*i + el, 1, this.dS + i * this.cP.offset() + index);
+      fs.readSync(fd, buffer, bcount*i + el, 1, this.dS + i * this.tS.eventOffset() + index);
     });
 	}
   // data for one color
@@ -56,7 +56,8 @@ DataFactory.prototype.parseParamData = function(param) {
     buffer: buffer,
     bsize: this.bsize,
     bcount: this.bsize / 8,
-    name: param
+    index: param,
+    name: this.tS.pName(param)
   }
 };
 

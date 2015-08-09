@@ -12,13 +12,14 @@ Reader = function(text, data) {
 
   this._text = text;
   this._data = data;
+  this.colorCache = [];
 	
 }
 
 /**
  * reads to position to plot the graph
  */
-Reader.prototype.readPosition = function(p1, p2, pos) {
+Reader.prototype.readPosition = function(c1, c2, pos) {
   return {
   this._text.getParam(p1)
 };
@@ -26,14 +27,14 @@ Reader.prototype.readPosition = function(p1, p2, pos) {
 /**
  * loads the specfied parameter into memory
  */
-Reader.prototype.loadParameter = function(par) {
+Reader.prototype.loadColor = function(par, cache) {
 }
 
 /**
  * frees memory alocated by parameter and make it
  * available for gc
  */
-Reader.prototype.throwParameter = function(par) {
+Reader.prototype.throwColor = function(par) {
 }
 
 module.exports = Reader;
