@@ -2,7 +2,7 @@
 * TODO make configurable cache for param buffer
 */
 var
-	Parser,
+	DataFactory,
 	fs = require('fs')
 ;
 
@@ -15,7 +15,7 @@ var
 * 	this object needs to be valid,	we do not check it here. the paraparser does it.
 * @param {Object} header info
 */
-Parser = function(fd, cP, header) {
+DataFactory = function(fd, cP, header) {
 	this.cP = cP;
 	this.dS = header[1].start;
 	this.dE = header[1].end;
@@ -32,7 +32,7 @@ Parser = function(fd, cP, header) {
 *
 * @returns {Object} object containing buffer and bytesize for the parameter
 */
-Parser.prototype.parseParamData = function(param) {
+DataFactory.prototype.parseParamData = function(param) {
 	if(!this.cP.pName(param)) {
 		throw Error('wrong parameters entered');
 	}
@@ -46,11 +46,12 @@ Parser.prototype.parseParamData = function(param) {
 
 	for(; i < this.cP.tot; i++) {
     // reads according byte order
-    // TODO check if it is faster than proecessing byte order after the event is loaded
+    // TODO check if it is faster than processing byte order after the event is loaded
     this.byteOrder.forEach(function(el,index) {
       fs.readSync(fd, buffer, bcount*i + el, 1, this.dS + i * this.cP.offset() + index);
     });
 	}
+  // data for one color
 	return {
     buffer: buffer,
     bsize: this.bsize,
@@ -59,7 +60,7 @@ Parser.prototype.parseParamData = function(param) {
   }
 };
 
-module.exports = Parser;
+module.exports = DataFactory;
 
 /**
 * byte order is marked as 1,2,3,4

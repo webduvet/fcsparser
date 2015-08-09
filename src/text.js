@@ -25,16 +25,85 @@ var Text = function(fd, header) {
 
 	this.text = params;
 
+  this.offset = 0;
+  for( ; i < this.text.tot; i++){
+    this.offset += this.bsize(i);
+  }
+
+};
+
+/**
+ * after processing text segment we see if the header needs to be updated
+ * so let update it
+ * TODO. create copy of the header for Text object
+ */
+Text.prototype.updateHeader = function() {
   // now amend the header according the TEXT info
-	if(+params.begindata && +params.enddata) {
-		header[1].start = +params.begindata;
-		header[1].end = +params.enddata;
+	if(+this.text.begindata && +this.text.enddata) {
+		this.header[1].start = +this.text.begindata;
+		this.header[1].end = +this.text.enddata;
 	}
-	if(+params.beginanalysis && +params.endanalysis) {
-		header[2].start = +params.beginanalysis;
-		header[2].end = +params.endanalysis;
+	if(+this.text.beginanalysis && +this.text.endanalysis) {
+		this.header[2].start = +this.text.beginanalysis;
+		this.header[2].end = +this.text.endanalysis;
 	}
+  return this;
 };
 
 
-module.exports = TextParser;
+Text.prototype.offset = function() {
+	return this.offset;
+};
+
+Text.prototype.tot = function() {
+	return this.text.tot;
+};
+
+/**
+* returns name of the parameter
+*/
+Text.prototype.cName = function(p) {
+	return this.text['p'+p+'n'];
+};
+
+/**
+* returns size of the parameter value in bytes
+* @param {int} parameter name (number)
+*
+* @return {int} size of the parameter [8,16,32,64]
+*/
+Text.prototype.bsize = function(p) {
+	return this.text['p'+p+'b'];
+};
+
+/**
+* returns size of the parameter value in bytes
+* @param {int} parameter name (number)
+*
+* @return {int} number of bytes per paremeter
+*/
+Text.prototype.bcount = function(p) {
+	return this.bsize(p)/8;
+};
+
+/**
+ * returns the array of color names
+ * @returns {Array}
+ */
+Text.prototype.getNames = function() {
+  if (this.names) {
+    return this.names;
+  } 
+
+  this.names = [];
+
+  var i = 1;
+
+  for(; i <== this.text.tot; i++) {
+    this.names.push(this.cName(i));
+  }
+
+  return this.names;
+};
+
+module.exports = Text;
