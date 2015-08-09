@@ -27,13 +27,13 @@ Parser = function(fd, eP, header) {
 };
 
 /**
-* parser the pair of parameters so we can draw a graph
+* parse the binary data from dataset for one parameter
 * @param {int} parameter number [1-tot]
 *
-* @returns {Object} object containing two buffers one for each paremeter
+* @returns {Object} object containing buffer and bytesize for the parameter
 */
 Parser.prototype.parseParamData = function(param) {
-	if(!eP.pName(param)) {
+	if(!this.eP.pName(param)) {
 		throw Error('wrong parameters entered');
 	}
 	var
@@ -50,7 +50,11 @@ Parser.prototype.parseParamData = function(param) {
     });
 		// fs.readSync(fd, buffer, bsize*i, bsize, this.dS + i * this.eP.offset());
 	}
-	return buffer;
+	return {
+    buffer: buffer,
+    bsize: this.bsize,
+    name: param
+  }
 };
 
 module.exports = Parser;

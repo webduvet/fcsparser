@@ -9,11 +9,10 @@
  *  name and index of the parameter
  * 
  */
-var Color = function(buffer, info) {
-  this.buf = buffer;
-  this.info = info;
+var Color = function(o) {
+  this.o = o;
   // we already have the lower ednian from read
-  this.method = 'readUInt'+info.byteSize+'LE';
+  this.method = 'readUInt'+.byteSize+'LE';
   this.offset = 0;
 }
 
@@ -22,25 +21,21 @@ var Color = function(buffer, info) {
  *
  * @returns {int} parameter value
  */
-Color.prototype.readDot = function(offset) {
+Color.prototype.readEvent = function(offset) {
   var 
-    dot = 0,
+    ev = 0,
     i = 0
   ;
  
-  dot = buf[this.method](offset * this.byteCount);
+  ev = buf[this.method](offset * this.byteCount);
 
   /*
   for(; i < info.biteSize; i++) {
     dot << 8;
     dot += 
   */
-  return dot;
+  return ev;
 };
 
-Color.prototype.readSequence = function(offset, length) {
-  // node.js does not have typed arrays
-
-}
 
 module.exports = Color;
