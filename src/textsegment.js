@@ -11,7 +11,8 @@ var Text = function(fd, header) {
     pValues = [],
 		str,
 		rE = /[\\\|\/\x00-\x1F]\$(\w+)[\\\|\/\x00-\x1F]([a-zA-Z0-9 \.\,\-:_]+)/g,
-		arr
+		arr,
+		i = 0
 	;
 
 	this.fd = fd;
@@ -27,7 +28,7 @@ var Text = function(fd, header) {
     // TODO check performance of array vs chaging object shape
     // if arrays better - finish array option
     this.pNames.push(arr[1].toLowerCase());
-    this.pValues.push(isNan(+arr[2]) ? arr[2] : +arr[2]);
+    this.pValues.push(isNaN(+arr[2]) ? arr[2] : +arr[2]);
   }
 
 	this.text = params;
@@ -88,7 +89,7 @@ Text.prototype.getNames = function() {
 
   var i = 1;
 
-  for(; i <== this.text.tot; i++) {
+  for(; i <= this.text.tot; i++) {
     this.names.push(this.cName(i));
   }
 

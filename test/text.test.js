@@ -18,7 +18,7 @@ var
 		{ start: 0, end: 0 }
 	],
 
-	tp = require('../src/textparser.js'),
+	Ts = require('../src/textsegment.js'),
 	testFile1 = './test/mockdata/test1.fcs',
 	testFile2 = './test/mockdata/test2.fcs',
 	fd
@@ -35,18 +35,18 @@ module.exports = {
 	'happy path': {
 		'read text segment file1': function(test) {
 			fd = fs.openSync(testFile1, 'r');
-			var params = tp.parseText(fd, mockHeader1[1]);
+			var params = new Ts(fd, mockHeader1);
 			test.ok(params, 'Expect truthy value in params');
 			test.ok(params.tot, 'Expect to hav TOT paramter');
-			test.ok(params.byteord, 'Expect to have bytorder parameter');
+			test.ok(params.getNames(), 'Expect to have bytorder parameter');
 			test.done();
 		},
 		'read text segment file2': function(test) {
 			fd = fs.openSync(testFile2, 'r');
-			var params = tp.parseText(fd, mockHeader2[1]);
+			var params = new Ts(fd, mockHeader1);
 			test.ok(params, 'Expect truthy value in params');
 			test.ok(params.tot, 'Expect to hav TOT paramter');
-			test.ok(params.byteord, 'Expect to have bytorder parameter');
+			test.ok(params.getNames(), 'Expect to have bytorder parameter');
 			test.done();
 		}
 	}
