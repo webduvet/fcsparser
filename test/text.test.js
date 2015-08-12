@@ -37,16 +37,16 @@ module.exports = {
 			fd = fs.openSync(testFile1, 'r');
 			var params = new Ts(fd, mockHeader1);
 			test.ok(params, 'Expect truthy value in params');
-			test.ok(params.tot, 'Expect to hav TOT paramter');
-			test.ok(params.getNames(), 'Expect to have bytorder parameter');
+			test.ok(params.getNames(), 'Expect to have some parameter names');
+			test.equals(params.tot(), 5634, 'Expect to hav TOT paramter equal to 5634');
 			test.done();
 		},
 		'read text segment file2': function(test) {
 			fd = fs.openSync(testFile2, 'r');
 			var params = new Ts(fd, mockHeader1);
 			test.ok(params, 'Expect truthy value in params');
-			test.ok(params.tot, 'Expect to hav TOT paramter');
-			test.ok(params.getNames(), 'Expect to have bytorder parameter');
+			test.ok(params.getNames(), 'Expect to have some parameter names');
+			test.equals(params.tot(), 10000, 'Expect to hav TOT paramter');
 			test.done();
 		}
 	}
