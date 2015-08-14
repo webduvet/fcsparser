@@ -6,14 +6,14 @@ var fs = require('fs');
 */
 var Text = function(fd, header) {
 	var buffer = new Buffer(header[1].end - header[1].start),
-		params = {},
+    params = {},
     pNames = [],
     pValues = [],
-		str,
-		rE = /[\\\|\/\x00-\x1F]\$(\w+)[\\\|\/\x00-\x1F]([a-zA-Z0-9 \.\,\-:_]+)/g,
-		arr,
-		i = 0
-	;
+    str,
+    rE = /[\\\|\/\x00-\x1F]\$(\w+)[\\\|\/\x00-\x1F]([a-zA-Z0-9 \.\,\-:_]+)/g,
+    arr,
+    i = 0
+    ;
 
 	this.fd = fd;
 	this.text = null;
@@ -41,19 +41,31 @@ var Text = function(fd, header) {
 };
 
 
+/**
+* returns the offset between events
+*
+* @returns {int} legth in bytes between two consecutive events
+*/
 Text.prototype.eventOffset = function() {
 	return this.eventOffset;
 };
 
+/**
+* returns the total number of events
+* @returns {int}
+*/
 Text.prototype.tot = function() {
 	return this.text.tot;
 };
 
 /**
 * returns name of the parameter
+* @param {int} numeric parameter identifier
+*
+* @returns {string} shortname for parameter
 */
 Text.prototype.cName = function(p) {
-	return this.text['p'+p+'n'];
+  return this.text['p'+p+'n'];
 };
 
 /**
@@ -63,7 +75,7 @@ Text.prototype.cName = function(p) {
 * @return {int} size of the parameter [8,16,32,64]
 */
 Text.prototype.bsize = function(p) {
-	return this.text['p'+p+'b'];
+  return this.text['p'+p+'b'];
 };
 
 /**
