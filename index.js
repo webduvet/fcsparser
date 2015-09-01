@@ -26,7 +26,6 @@ var FcsStream = function(path) {
   //TODO  this has to be done manually going through dedicated bytes
   headerText = buffer.toString('utf8').match(/\w+\.*\w*/g);
   if (/^fcs[23]/.test(headerText[0])) {
-    console.log(headerText);
     throw Error('incorrect file, wrong header');
   }
   offsets.version = headerText[0];
