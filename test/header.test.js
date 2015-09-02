@@ -5,7 +5,7 @@ process.on('uncaugthException', function(err){
 
 var 
 	fs = require('fs'),
-	testCase = require('nodeunit').testCase,
+	tc = require('nodeunit').testCase,
 
 	hp = require('../src/headerparser.js'),
 	testFile1 = './test/mockdata/test1.fcs',
@@ -26,8 +26,14 @@ module.exports = {
   'throws error on wrong file or filepath': function(test) {
     test.done();
   },
-	'read file header': {
-		'file1': function(test) {
+	'file 1': tc({
+		'setUp': function(done) {
+			done();
+		},
+		'tearDown': function(done) {
+			done();
+		},
+		'read file header': function(test) {
 			fd = fs.openSync(testFile1, 'r');
 			header = hp.parseHeader(fd);
 			test.ok(header, "expected truthy value in header");
@@ -36,8 +42,10 @@ module.exports = {
 			test.equals(header[1].start, 1203, 'expect data segment satrt at 1203');
 			test.equals(header[2].start, 0, 'expect analysus segment to be 0');
 			test.done();
-		},
-		'file2': function(test) {
+		}
+	}),
+	'file 2': tc({
+		'read file header': function(test) {
 			fd = fs.openSync(testFile2, 'r');
 			header = hp.parseHeader(fd);
 			test.ok(header, "expected truthy value in header");
@@ -47,6 +55,6 @@ module.exports = {
 			test.equals(header[2].start, 0, 'expect analysus segment to be 0');
 			test.done();
 		}
-  }
+  })
 } 
 
