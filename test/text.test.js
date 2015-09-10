@@ -4,9 +4,16 @@ process.on('uncaugthException', function(err){
 });
 
 var 
+	// testing textSegment parser
+	Ts = require('../src/textsegment.js'),
+
 	fs = require('fs'),
 	testCase = require('nodeunit').testCase,
 
+	testFile1 = './test/mockdata/test1.fcs',
+	testFile2 = './test/mockdata/test2.fcs',
+
+	// this need to corespodent to test files
 	mockHeader1 = [
 		{ start: 58, end: 1202 },
 		{ start: 1203, end: 113882 },
@@ -17,10 +24,6 @@ var
 		{ start: 1203, end: 113882 },
 		{ start: 0, end: 0 }
 	],
-
-	Ts = require('../src/textsegment.js'),
-	testFile1 = './test/mockdata/test1.fcs',
-	testFile2 = './test/mockdata/test2.fcs',
 	fd
 	;
 
