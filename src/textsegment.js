@@ -108,4 +108,8 @@ Text.prototype.getNames = function() {
   return this.names;
 };
 
+Text.prototype.getDataType = function() {
+  return this.text.datatype;
+}
+
 module.exports = Text;

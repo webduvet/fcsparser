@@ -12,6 +12,8 @@
 var Color = function(o) {
   this.o = o;
   // we already have the lower ednian from read
+  // TODO read Int, read ACI read FLOAT read DOUBLE
+  // depending on the DATATYPE
   this.method = 'readUInt'+o.bsize+'LE';
   this.offset = 0;
 }
@@ -27,7 +29,7 @@ Color.prototype.readEvent = function(offset) {
     i = 0
   ;
  
-  ev = o.buffer[this.method](offset * this.bcount);
+  ev = this.o.buffer[this.method](offset * this.bcount);
 
   /*
   for(; i < info.biteSize; i++) {
