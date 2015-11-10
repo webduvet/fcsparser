@@ -4,7 +4,7 @@
   "description": "parser for fcs files",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "./node_modules/nodeunit/bin/nodeunit test"
   },
   "repository": {
     "type": "git",
