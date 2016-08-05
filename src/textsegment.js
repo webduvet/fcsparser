@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs');
 /**
 * creates the text parser from given file descriptor

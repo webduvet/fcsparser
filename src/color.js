@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * this is the class representing one color
  * we have here the reference to data buffer of binary stream
