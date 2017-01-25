@@ -11,7 +11,8 @@
     "url": "git+https://github.com/webduvet/fcsparser.git"
   },
   "keywords": [
-    "fcs"
+    "fcs",
+    "cytometry"
   ],
   "author": "Andrej Bartko",
   "license": "MIT",
